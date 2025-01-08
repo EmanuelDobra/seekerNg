@@ -1,8 +1,12 @@
-<app-navbar></app-navbar>
-@if (hasTitle()) {
-<h2>{{ title() }}</h2>
-<button (click)="askQuestion(userQuestion())">Ask me!</button>
-<input type="text" [(ngModel)]="userQuestion" />
-} @else {
-<h1 (click)="getAiModel()">Click Me!</h1>
-}
+<div [ngClass]="themeService.theme()" class="fill-content">
+    <app-navbar></app-navbar>
+    @if (navbarService.component() === 'home') {
+        <h1>Home</h1>
+        <!-- <app-home></app-home> -->
+    } @else if (navbarService.component() === 'rag-chat') {
+        <app-rag-chat></app-rag-chat>
+    } @else if (navbarService.component() === 'rss-feed') {
+        <h1>RSS Feed</h1>
+        <!-- <app-rss-feed></app-rss-feed> -->
+    }
+</div>

@@ -1,0 +1,17 @@
+.long-input {
+    width: 500px;
+    color: rgb(248, 227, 121);
+}
+
+// Dark theme colors
+// .mdc-line-ripple::before {
+//     background-color: rgb(248, 227, 121);
+// }
+
+mat-form-field.dark .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+    border-bottom-color: rgb(248, 227, 121) !important;
+}
+
+mat-form-field.light .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+    border-bottom-color: rgb(90, 113, 247) !important;
+}

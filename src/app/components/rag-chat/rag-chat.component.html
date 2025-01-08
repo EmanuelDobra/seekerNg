@@ -1,0 +1,16 @@
+<div class="sm-pad-lft">
+    @if (hasTitle()) {
+        <h2>{{ title() }}</h2>
+        <form class="inline-form">
+            <mat-form-field class="long-input" [ngClass]="themeService.theme()">
+              <mat-label [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">Ask AI</mat-label>
+              <input matInput placeholder="Ex. What is the text about?" value="" [(ngModel)]="userQuestion" name="userQuestion">
+            </mat-form-field>
+            <button mat-icon-button (click)="askQuestion(userQuestion())">
+                <mat-icon [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">send</mat-icon>
+            </button>
+          </form>
+        } @else {
+        <h1 (click)="getAiModel()">Click Me!</h1>
+        }
+</div>

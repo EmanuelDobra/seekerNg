@@ -1,4 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// html, body { height: 100%; }
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.pull-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.dark-theme-icon {
+    color: blanchedalmond;
+}
+
+.light-theme-icon {
+    color: black;
+}
+
+.dark-theme-label {
+    color: rgb(248, 227, 121);
+}
+
+.light-theme-label {
+    color: rgb(90, 113, 247);
+}
+
+.fill-content {
+    min-height: 100vh;
+}
+
+.sm-pad-lft {
+    padding-left: 10px;
+}
+
+.inline-form {
+    display: inline;
+}

@@ -1,0 +1,20 @@
+<mat-toolbar>
+  <button mat-icon-button [matMenuTriggerFor]="sections">
+    <mat-icon [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-icon' : 'light-theme-icon'">cake</mat-icon>
+  </button>
+  <mat-menu #sections="matMenu">
+    <button mat-menu-item (click)="navbarService.switchPage('home')">Home</button>
+    <button mat-menu-item (click)="navbarService.switchPage('rag-chat')">AI Rag Chat</button>
+    <button mat-menu-item (click)="navbarService.switchPage('rss-feed')">RSS Feed</button>
+  </mat-menu>
+  <span class="nav-title">{{ title() }}</span>
+  <mat-slide-toggle class="pull-right" (click)="themeService.switchTheme()" checked>
+    @if (themeService.theme() === 'dark') {
+      <mat-icon>bedtime</mat-icon>
+    } @else {
+      <mat-icon>brightness_7</mat-icon>
+    }
+  </mat-slide-toggle>
+</mat-toolbar>
+
+
