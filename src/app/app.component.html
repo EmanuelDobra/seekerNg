@@ -1,4 +1,8 @@
 <app-navbar></app-navbar>
-<h1>
-    Hello, {{ title() }}
-</h1>
+@if (hasTitle()) {
+<h2>{{ title() }}</h2>
+<button (click)="askQuestion(userQuestion())">Ask me!</button>
+<input type="text" [(ngModel)]="userQuestion" />
+} @else {
+<h1 (click)="getAiModel()">Click Me!</h1>
+}

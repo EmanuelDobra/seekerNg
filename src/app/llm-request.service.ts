@@ -1,21 +1,31 @@
 import { inject, Injectable, Signal, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LlmRequestService {
-  readonly API_ENDPOINT: Signal<string> = signal('http://localhost:1234/v1/chat/completions'); 
+  readonly RAG_ENDPOINT: Signal<string> = signal('http://127.0.0.1:8000/api/rag/completions'); 
+  readonly MODEL_ENDPOINT: Signal<string> = signal('http://localhost:1234/v1/models');
   readonly API_KEY: Signal<string> = signal('');
 
   httpClient = inject(HttpClient);
 
-  getChatCompletion(data: any): Observable<any> {
+  askQuestion(questionz: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'accept': 'application/json',
     });
+  
+    const body = {
+      text: questionz,
+    };
+  
+    return this.httpClient.post(this.RAG_ENDPOINT(), body, { headers });
+  }
 
-    return this.httpClient.post(this.API_ENDPOINT(), data, { headers });
+  getAiModel(): Observable<any> {
+    return this.httpClient.get(this.MODEL_ENDPOINT());
   }
 }
