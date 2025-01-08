@@ -19,8 +19,16 @@ mat-form-field.light .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc
 // Spinner color and size
 mat-spinner {
     height: 50px !important;
-    left: 50%;
+}
+
+#modelSpinner {
     transform: translate(-50%, 250%);
+    left: 50%;
+}
+
+#chatSpinner {
+    transform: translate(0%, 50%);
+    left: 15%;
 }
 
 .dark circle {
@@ -34,6 +42,7 @@ mat-spinner {
 // chat window css
 .chat-window {
     padding: 10px;
+    padding-right: 15px;
     border: 1px solid rgb(34, 74, 250);
     border-radius: 10px;
     height: auto;

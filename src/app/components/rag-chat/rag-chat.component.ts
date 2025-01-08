@@ -10,13 +10,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { ViewEncapsulation } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { provideMarkdown } from 'ngx-markdown';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
   selector: 'app-rag-chat',
-  imports: [FormsModule, NgClass, MatButtonModule, MatInputModule, MatFormFieldModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [FormsModule, NgClass, MatButtonModule, MatInputModule, MatFormFieldModule, MatIconModule, MatProgressSpinnerModule, MarkdownModule],
   templateUrl: './rag-chat.component.html',
   styleUrl: './rag-chat.component.scss',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [provideMarkdown()]
 })
 export class RagChatComponent {
   // Signals
@@ -24,7 +27,10 @@ export class RagChatComponent {
   hasTitle = signal(false);
   userQuestion = signal('');
   chatResponse = signal('');
+  isGeneratingAnswer = signal(false); // are we in the process of fetching AI response?
   pdf = signal('default.pdf'); // need to fetch from seekerPy instead
+
+  // Give me 5 quotes regarding prayer in the text. Then make a conclusion based on those. Use Markdown please.
 
   // Services
   llmRequest = inject(LlmRequestService);
@@ -35,7 +41,11 @@ export class RagChatComponent {
   }
 
   askQuestion(question: string): void {
-    this.llmRequest.askQuestion(question).subscribe(res => this.chatResponse.set(res));
+    this.isGeneratingAnswer.set(true);
+    this.llmRequest.askQuestion(question).subscribe(res => {
+      this.isGeneratingAnswer.set(false);
+      this.chatResponse.set(res);
+    });
   }
 
   attachPdf(pdfName: string = "not-yet-implemented.pdf :("): void {

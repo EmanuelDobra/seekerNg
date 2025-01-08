@@ -19,12 +19,14 @@
     </button>
   </form>
   } @else {
-  <mat-spinner [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'"></mat-spinner>
+  <mat-spinner id="modelSpinner" [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'"></mat-spinner>
   }
 
-  @if (chatResponse() != '') {
+  @if (!isGeneratingAnswer() && !(chatResponse() === '')) {
   <div [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'" class="chat-window">
-    {{ chatResponse() }}
+    <markdown lineNumbers>{{ chatResponse() }}</markdown>
   </div>
+  } @else if (isGeneratingAnswer()) {
+    <mat-spinner id="chatSpinner" [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'"></mat-spinner>
   }
 </div>
