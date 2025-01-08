@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
@@ -15,7 +15,10 @@ import { NavbarService } from '../../services/navbar.service';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-  title = signal('Seeker');
+  // Signals
+  title = computed(() => this.navbarService.componentName());
+
+  // Services
   themeService = inject(ThemeService);
   navbarService = inject(NavbarService);
 }

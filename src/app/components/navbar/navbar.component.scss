@@ -1,6 +1,16 @@
+// title
 .nav-title {
     margin-left: 10px;
     font-family: Roboto, "Helvetica Neue", sans-serif;
     font-size: 1.3em;
     font-weight: 500;
+}
+
+// icon buttons
+.theme-icon {
+    transform: translate(0%, 8%);
+}
+
+.nav-icon {
+    transform: translate(0%, -10%);
 }

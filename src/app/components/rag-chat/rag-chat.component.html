@@ -1,16 +1,30 @@
 <div class="sm-pad-lft">
-    @if (hasTitle()) {
-        <h2>{{ title() }}</h2>
-        <form class="inline-form">
-            <mat-form-field class="long-input" [ngClass]="themeService.theme()">
-              <mat-label [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">Ask AI</mat-label>
-              <input matInput placeholder="Ex. What is the text about?" value="" [(ngModel)]="userQuestion" name="userQuestion">
-            </mat-form-field>
-            <button mat-icon-button (click)="askQuestion(userQuestion())">
-                <mat-icon [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">send</mat-icon>
-            </button>
-          </form>
-        } @else {
-        <h1 (click)="getAiModel()">Click Me!</h1>
-        }
+  @if (hasTitle()) {
+  <h2>Model: {{ title() }}</h2>
+  <div class="flex">
+    <h3>Data: {{ pdf() }}</h3>
+    <button mat-icon-button class="attach-btn" (click)="attachPdf()">
+      <mat-icon
+        [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">attach_file</mat-icon>
+    </button>
+  </div>
+  <form class="inline-form">
+    <mat-form-field class="long-input" [ngClass]="themeService.theme()">
+      <mat-label [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">Ask
+        AI</mat-label>
+      <input matInput placeholder="Ex. What is the text about?" value="" [(ngModel)]="userQuestion" name="userQuestion">
+    </mat-form-field>
+    <button mat-icon-button (click)="askQuestion(userQuestion())">
+      <mat-icon [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">send</mat-icon>
+    </button>
+  </form>
+  } @else {
+  <mat-spinner [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'"></mat-spinner>
+  }
+
+  @if (chatResponse() != '') {
+  <div [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'" class="chat-window">
+    {{ chatResponse() }}
+  </div>
+  }
 </div>
