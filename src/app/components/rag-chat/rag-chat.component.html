@@ -1,6 +1,6 @@
 <div class="sm-pad-lft">
-  @if (hasTitle()) {
-  <h2>Model: {{ title() }}</h2>
+  @if (hasFetchedModel()) {
+  <h2>Model: {{ modelName() }}</h2>
   <div class="flex">
     <h3>Data: {{ pdf() }}</h3>
     <button mat-icon-button class="attach-btn" (click)="attachPdf()">
@@ -12,9 +12,9 @@
     <mat-form-field class="long-input" [ngClass]="themeService.theme()">
       <mat-label [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">Ask
         AI</mat-label>
-      <input matInput placeholder="Ex. What is the text about?" value="" [(ngModel)]="userQuestion" name="userQuestion">
+      <input matInput placeholder="Ex. What was Spartan's ethos?" value="What was Spartan's ethos?" [(ngModel)]="userQuestion" name="userQuestion">
     </mat-form-field>
-    <button mat-icon-button (click)="askQuestion(userQuestion())">
+    <button mat-icon-button (click)="askPdfQuestion(userQuestion())">
       <mat-icon [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">send</mat-icon>
     </button>
   </form>

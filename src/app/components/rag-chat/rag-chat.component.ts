@@ -23,12 +23,12 @@ import { MarkdownModule } from 'ngx-markdown';
 })
 export class RagChatComponent {
   // Signals
-  title = signal('');
-  hasTitle = signal(false);
-  userQuestion = signal('');
+  modelName = signal(''); // 
+  hasFetchedModel = signal(false);
+  userQuestion = signal(''); 
   chatResponse = signal('');
   isGeneratingAnswer = signal(false); // are we in the process of fetching AI response?
-  pdf = signal('default.pdf'); // need to fetch from seekerPy instead
+  pdf = signal('default.pdf'); // TODO: need to fetch from seekerPy instead
 
   // Give me 5 quotes regarding prayer in the text. Then make a conclusion based on those. Use Markdown please.
 
@@ -48,15 +48,28 @@ export class RagChatComponent {
     });
   }
 
-  attachPdf(pdfName: string = "not-yet-implemented.pdf :("): void {
-    this.pdf.set(pdfName);
+  askPdfQuestion(question: string): void {
+    this.isGeneratingAnswer.set(true);
+    this.llmRequest.askPdfQuestion(question, this.pdf()).subscribe(res => {
+      this.isGeneratingAnswer.set(false);
+      this.chatResponse.set(res);
+    });
+  }
+
+  attachPdf(pdfName: string = "ethosCA.pdf"): void {
+    if (this.pdf() === 'default.pdf') {
+      this.pdf.set('ethosCA.pdf');
+    } else {
+      this.pdf.set('default.pdf');
+    }
+    // this.pdf.set(pdfName);
   }
 
   getAiModel(): void {
     this.llmRequest.getAiModel().pipe(
       map(res => {
-        this.title.set(res.data[0].id);
-        this.hasTitle.set(true);
+        this.modelName.set(res.data[0].id);
+        this.hasFetchedModel.set(true);
       })
     ).subscribe();
   }
