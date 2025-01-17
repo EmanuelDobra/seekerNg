@@ -1,7 +1,7 @@
 import { inject, Injectable, Signal, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { PdfQuestion } from '../interfaces/pdf-question';
+import { PdfQuestion, RagQuestion } from '../interfaces/llm-questions';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +38,23 @@ export class LlmRequestService {
       pdf: pdf,
     };
   
-    return this.httpClient.post(this.QUESTION_API(), body, { headers });
+    return this.httpClient.post(this.QUESTION_API() + "/pdf", body, { headers });
+  }
+
+  askRagQuestion(question: any, type: any, file: any, context: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'accept': 'application/json',
+    });
+  
+    const body: RagQuestion = {
+      question: question,
+      context: context,
+      rag_type: type,
+      file_name: file,
+    };
+  
+    return this.httpClient.post(this.QUESTION_API() + "/any", body, { headers });
   }
 
   getAiModel(): Observable<any> {

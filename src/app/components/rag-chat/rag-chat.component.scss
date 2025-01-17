@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 .long-input {
     width: 41.15%;
     color: rgb(248, 227, 121);
@@ -77,4 +79,25 @@ mat-spinner {
 
 .light .attach-btn {
     transform: translate(0%, 15%);
+}
+
+.dark .mat-mdc-tab-labels {
+    background-color: #201f1f4f; 
+}
+
+.light .mat-mdc-tab-labels {
+    background-color: #f8f4f4; 
+}
+
+.dark [aria-selected="true"] span.mdc-tab__text-label {
+    color: rgb(21, 144, 54) !important;
+}
+
+.dark span.mdc-tab-indicator__content--underline{
+    border-color: rgb(21, 144, 54) !important;
+    --mdc-tab-indicator-active-indicator-color: rgb(21, 144, 54) !important;
+}
+
+.dark [aria-selected="false"] span.mdc-tab__text-label {
+    color: #cacaca !important;
 }

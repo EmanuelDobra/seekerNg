@@ -1,32 +1,65 @@
-<div class="sm-pad-lft">
-  @if (hasFetchedModel()) {
-  <h2>Model: {{ modelName() }}</h2>
-  <div class="flex">
-    <h3>Data: {{ pdf() }}</h3>
-    <button mat-icon-button class="attach-btn" (click)="attachPdf()">
-      <mat-icon
-        [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">attach_file</mat-icon>
-    </button>
-  </div>
-  <form class="inline-form">
-    <mat-form-field class="long-input" [ngClass]="themeService.theme()">
-      <mat-label [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">Ask
-        AI</mat-label>
-      <input matInput placeholder="Ex. What was Spartan's ethos?" value="What was Spartan's ethos?" [(ngModel)]="userQuestion" name="userQuestion">
-    </mat-form-field>
-    <button mat-icon-button (click)="askPdfQuestion(userQuestion())">
-      <mat-icon [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">send</mat-icon>
-    </button>
-  </form>
-  } @else {
-  <mat-spinner id="modelSpinner" [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'"></mat-spinner>
-  }
+@if (hasFetchedModel()) {
+<mat-tab-group>
+  <mat-tab label="Preloaded Pdf Chat">
+    <div class="sm-pad-lft">
+      <h2>Model: {{ modelName() }}</h2>
+      <div class="flex">
+        <h3>Data: {{ pdf() }}</h3>
+        <button mat-icon-button class="attach-btn" (click)="attachPdf()">
+          <mat-icon
+            [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">attach_file</mat-icon>
+        </button>
+      </div>
+      <form class="inline-form">
+        <mat-form-field class="long-input" [ngClass]="themeService.theme()">
+          <mat-label [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">Ask</mat-label>
+          <input matInput placeholder="Ex. What was Spartan's ethos?" value="What was Spartan's ethos?"
+            [(ngModel)]="userQuestion" name="userQuestion">
+        </mat-form-field>
+        <button mat-icon-button (click)="askPdfQuestion(userQuestion())">
+          <mat-icon
+            [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">send</mat-icon>
+        </button>
+      </form>
+    </div>
+  </mat-tab>
+  <mat-tab label="Custom Context Chat">
+    <div class="sm-pad-lft">
+      <h2>Model: {{ modelName() }}</h2>
+      <div class="flex">
+        <h3>Data: {{ file() }}</h3>
+        <button mat-icon-button class="attach-btn" (click)="contextFileUpload.click()">
+          <input type="file" #contextFileUpload (change)="uploadFile($event)" hidden/>
+          <mat-icon
+            [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">attach_file</mat-icon>
+        </button>
+      </div>
+      <form class="inline-form">
+        <mat-form-field class="long-input" [ngClass]="themeService.theme()">
+          <mat-label [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">Ask</mat-label>
+          <input matInput placeholder="Ex. What was Spartan's ethos?" value="What was Spartan's ethos?"
+            [(ngModel)]="userQuestion" name="userQuestion">
+        </mat-form-field>
+        <button mat-icon-button (click)="askRagQuestion(userQuestion())">
+          <mat-icon
+            [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">send</mat-icon>
+        </button>
+      </form>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+} @else {
+<mat-spinner id="modelSpinner"
+  [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'"></mat-spinner>
+}
 
+<div class="sm-pad-lft">
   @if (!isGeneratingAnswer() && !(chatResponse() === '')) {
   <div [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'" class="chat-window">
     <markdown lineNumbers>{{ chatResponse() }}</markdown>
   </div>
   } @else if (isGeneratingAnswer()) {
-    <mat-spinner id="chatSpinner" [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'"></mat-spinner>
+  <mat-spinner id="chatSpinner"
+    [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'"></mat-spinner>
   }
 </div>

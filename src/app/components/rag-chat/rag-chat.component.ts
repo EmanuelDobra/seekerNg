@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { LlmRequestService } from '../../services/llm-request.service';
 import { ThemeService } from '../../services/theme.service';
-import { map } from 'rxjs';
+import { map, single } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,10 +12,11 @@ import { ViewEncapsulation } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { provideMarkdown } from 'ngx-markdown';
 import { MarkdownModule } from 'ngx-markdown';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-rag-chat',
-  imports: [FormsModule, NgClass, MatButtonModule, MatInputModule, MatFormFieldModule, MatIconModule, MatProgressSpinnerModule, MarkdownModule],
+  imports: [MatTabsModule, FormsModule, NgClass, MatButtonModule, MatInputModule, MatFormFieldModule, MatIconModule, MatProgressSpinnerModule, MarkdownModule],
   templateUrl: './rag-chat.component.html',
   styleUrl: './rag-chat.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -29,8 +30,9 @@ export class RagChatComponent {
   chatResponse = signal('');
   isGeneratingAnswer = signal(false); // are we in the process of fetching AI response?
   pdf = signal('default.pdf'); // TODO: need to fetch from seekerPy instead
-
-  // Give me 5 quotes regarding prayer in the text. Then make a conclusion based on those. Use Markdown please.
+  file = signal('Please attach a file'); 
+  questionType = signal('pdf');
+  ragContext = signal('');
 
   // Services
   llmRequest = inject(LlmRequestService);
@@ -40,6 +42,7 @@ export class RagChatComponent {
     this.getAiModel();
   }
 
+  //#region Ask AI
   askQuestion(question: string): void {
     this.isGeneratingAnswer.set(true);
     this.llmRequest.askQuestion(question).subscribe(res => {
@@ -56,13 +59,13 @@ export class RagChatComponent {
     });
   }
 
-  attachPdf(pdfName: string = "ethosCA.pdf"): void {
-    if (this.pdf() === 'default.pdf') {
-      this.pdf.set('ethosCA.pdf');
-    } else {
-      this.pdf.set('default.pdf');
-    }
-    // this.pdf.set(pdfName);
+  askRagQuestion(question: string): void {
+    this.isGeneratingAnswer.set(true);
+    console.log(this.ragContext());
+    this.llmRequest.askRagQuestion(question, "text", this.pdf(), this.ragContext()).subscribe(res => {
+      this.isGeneratingAnswer.set(false);
+      this.chatResponse.set(res);
+    });
   }
 
   getAiModel(): void {
@@ -72,5 +75,34 @@ export class RagChatComponent {
         this.hasFetchedModel.set(true);
       })
     ).subscribe();
+  }
+  //#endregion
+
+  uploadFile(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.file.set(file.name);
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const fileContent = reader.result as string;
+        // Append the new content to the existing signal value
+        this.ragContext.set(this.ragContext() + '\n' + fileContent);
+      };
+
+      reader.readAsText(file);
+    } else {
+      console.error('No file selected');
+    }
+  }
+
+  attachPdf(pdfName: string = "ethosCA.pdf"): void {
+    if (this.pdf() === 'default.pdf') {
+      this.pdf.set('ethosCA.pdf');
+    } else {
+      this.pdf.set('default.pdf');
+    }
+    // this.pdf.set(pdfName);
   }
 }
