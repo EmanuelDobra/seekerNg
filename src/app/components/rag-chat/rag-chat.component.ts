@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { LlmRequestService } from '../../services/llm-request.service';
 import { ThemeService } from '../../services/theme.service';
-import { map, single } from 'rxjs';
+import { map } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { provideMarkdown } from 'ngx-markdown';
 import { MarkdownModule } from 'ngx-markdown';
 import { MatTabsModule } from '@angular/material/tabs';
+import { PdfExtractionService } from '../../services/pdf-extraction.service';
 
 @Component({
   selector: 'app-rag-chat',
@@ -37,20 +38,13 @@ export class RagChatComponent {
   // Services
   llmRequest = inject(LlmRequestService);
   themeService = inject(ThemeService);
+  pdfExtractionService = inject(PdfExtractionService);
 
   ngOnInit(): void {
     this.getAiModel();
   }
 
   //#region Ask AI
-  askQuestion(question: string): void {
-    this.isGeneratingAnswer.set(true);
-    this.llmRequest.askQuestion(question).subscribe(res => {
-      this.isGeneratingAnswer.set(false);
-      this.chatResponse.set(res);
-    });
-  }
-
   askPdfQuestion(question: string): void {
     this.isGeneratingAnswer.set(true);
     this.llmRequest.askPdfQuestion(question, this.pdf()).subscribe(res => {
@@ -59,10 +53,11 @@ export class RagChatComponent {
     });
   }
 
-  askRagQuestion(question: string): void {
+  // Ask rag question with uploaded file
+  askCustomRagQuestion(question: string): void {
     this.isGeneratingAnswer.set(true);
     console.log(this.ragContext());
-    this.llmRequest.askRagQuestion(question, "text", this.pdf(), this.ragContext()).subscribe(res => {
+    this.llmRequest.askRagAnyQuestion(question, "text", this.pdf(), this.ragContext()).subscribe(res => {
       this.isGeneratingAnswer.set(false);
       this.chatResponse.set(res);
     });
@@ -97,12 +92,18 @@ export class RagChatComponent {
     }
   }
 
-  attachPdf(pdfName: string = "ethosCA.pdf"): void {
-    if (this.pdf() === 'default.pdf') {
-      this.pdf.set('ethosCA.pdf');
-    } else {
-      this.pdf.set('default.pdf');
-    }
-    // this.pdf.set(pdfName);
+  async uploadPdf(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      const file = input.files[0];
+      this.pdf.set(file.name);
+      try {
+        const pdfContent = await this.pdfExtractionService.extractTextFromPdf(file);
+        this.ragContext.set(this.ragContext() + '\n' + pdfContent);
+        console.log(pdfContent);
+      } catch (error) {
+        console.error(error);
+      }
+    } 
   }
 }

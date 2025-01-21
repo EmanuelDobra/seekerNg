@@ -13,20 +13,6 @@ export class LlmRequestService {
 
   httpClient = inject(HttpClient);
 
-  askQuestion(question: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'accept': 'application/json',
-    });
-  
-    const body: PdfQuestion = {
-      question: question,
-      pdf: 'quotes.pdf',
-    };
-  
-    return this.httpClient.post(this.QUESTION_API(), body, { headers });
-  }
-
   askPdfQuestion(question: any, pdf: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -41,7 +27,7 @@ export class LlmRequestService {
     return this.httpClient.post(this.QUESTION_API() + "/pdf", body, { headers });
   }
 
-  askRagQuestion(question: any, type: any, file: any, context: any): Observable<any> {
+  askRagAnyQuestion(question: any, type: any, file: any, context: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'accept': 'application/json',

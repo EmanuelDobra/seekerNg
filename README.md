@@ -2,7 +2,7 @@
 
 ## Prerequisites
 - Node.js - v^18.19.1 or newer
-
+- `npm install -g @angular/cli`
 
 ## Commmands
 ```bash

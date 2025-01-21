@@ -5,7 +5,8 @@
       <h2>Model: {{ modelName() }}</h2>
       <div class="flex">
         <h3>Data: {{ pdf() }}</h3>
-        <button mat-icon-button class="attach-btn" (click)="attachPdf()">
+        <button mat-icon-button class="attach-btn" (click)="contextPdfChange.click()">
+          <input type="file" #contextPdfChange (change)="this.pdf.set('quotes.pdf')" hidden/>
           <mat-icon
             [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">attach_file</mat-icon>
         </button>
@@ -40,7 +41,31 @@
           <input matInput placeholder="Ex. What was Spartan's ethos?" value="What was Spartan's ethos?"
             [(ngModel)]="userQuestion" name="userQuestion">
         </mat-form-field>
-        <button mat-icon-button (click)="askRagQuestion(userQuestion())">
+        <button mat-icon-button (click)="askCustomRagQuestion(userQuestion())">
+          <mat-icon
+            [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">send</mat-icon>
+        </button>
+      </form>
+    </div>
+  </mat-tab>
+  <mat-tab label="Custom Pdf Chat">
+    <div class="sm-pad-lft">
+      <h2>Model: {{ modelName() }}</h2>
+      <div class="flex">
+        <h3>Data: {{ pdf() }}</h3>
+        <button mat-icon-button class="attach-btn" (click)="contextPdfUpload.click()">
+          <input type="file" #contextPdfUpload (change)="uploadPdf($event)" hidden/>
+          <mat-icon
+            [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">attach_file</mat-icon>
+        </button>
+      </div>
+      <form class="inline-form">
+        <mat-form-field class="long-input" [ngClass]="themeService.theme()">
+          <mat-label [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">Ask</mat-label>
+          <input matInput placeholder="Ex. What was Spartan's ethos?" value="What was Spartan's ethos?"
+            [(ngModel)]="userQuestion" name="userQuestion">
+        </mat-form-field>
+        <button mat-icon-button (click)="askCustomRagQuestion(userQuestion())">
           <mat-icon
             [ngClass]="themeService.theme() === 'dark' ? 'dark-theme-label' : 'light-theme-label'">send</mat-icon>
         </button>
